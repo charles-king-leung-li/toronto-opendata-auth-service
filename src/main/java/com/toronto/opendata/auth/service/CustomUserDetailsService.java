@@ -1,4 +1,4 @@
-package com.toronto.opendata.auth.security;
+package com.toronto.opendata.auth.service;
 
 import com.toronto.opendata.auth.entity.User;
 import com.toronto.opendata.auth.repository.UserRepository;

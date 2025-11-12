@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "permissions")
 @Data
@@ -27,6 +30,9 @@ public class Permission {
     
     @Column(length = 20)
     private String action;
+    
+    @ManyToMany(mappedBy = "permissions")
+    private Set<Role> roles = new HashSet<>();
     
     public Permission(String name, String description, String resource, String action) {
         this.name = name;

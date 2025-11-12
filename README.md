@@ -82,7 +82,7 @@ Service runs on port **8082**.
 
 ## API Endpoints
 
-### Authentication
+### 🔓 Authentication Endpoints (`/api/auth`) - Public
 
 #### Register User
 ```http
@@ -99,6 +99,17 @@ Content-Type: application/json
 }
 ```
 
+**Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "type": "Bearer",
+  "username": "john_doe",
+  "email": "john@example.com"
+}
+```
+
 #### Login
 ```http
 POST /api/auth/login
@@ -110,36 +121,41 @@ Content-Type: application/json
 }
 ```
 
-Response:
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "type": "Bearer",
-  "username": "john_doe",
-  "email": "john@example.com"
-}
-```
-
 #### Refresh Token
 ```http
 POST /api/auth/refresh
 Authorization: Bearer {refresh_token}
 ```
 
-### User Management
+#### Health Check
+```http
+GET /api/auth/health
+```
 
-#### Get All Users (Admin only)
+---
+
+### 👤 User Management (`/api/users`)
+
+#### Get All Users
 ```http
 GET /api/users
 Authorization: Bearer {token}
 ```
+**Access:** ADMIN only
+
+#### Get Current User
+```http
+GET /api/users/me
+Authorization: Bearer {token}
+```
+**Access:** Authenticated users
 
 #### Get User by ID
 ```http
 GET /api/users/{id}
 Authorization: Bearer {token}
 ```
+**Access:** ADMIN, USER
 
 #### Update User
 ```http
@@ -149,17 +165,73 @@ Content-Type: application/json
 
 {
   "firstName": "John",
-  "lastName": "Smith"
+  "lastName": "Smith",
+  "email": "newemail@example.com"
 }
 ```
+**Access:** ADMIN only
 
-#### Delete User (Admin only)
+#### Change Password
+```http
+POST /api/users/{id}/change-password
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "oldPassword": "current123",
+  "newPassword": "newpass456"
+}
+```
+**Access:** ADMIN or owner
+
+#### Enable/Disable User
+```http
+POST /api/users/{id}/enabled
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "enabled": false
+}
+```
+**Access:** ADMIN only
+
+#### Lock/Unlock User
+```http
+POST /api/users/{id}/locked
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "locked": true
+}
+```
+**Access:** ADMIN only
+
+#### Assign Role to User
+```http
+POST /api/users/{userId}/roles/{roleId}
+Authorization: Bearer {token}
+```
+**Access:** ADMIN only
+
+#### Remove Role from User
+```http
+DELETE /api/users/{userId}/roles/{roleId}
+Authorization: Bearer {token}
+```
+**Access:** ADMIN only
+
+#### Delete User
 ```http
 DELETE /api/users/{id}
 Authorization: Bearer {token}
 ```
+**Access:** ADMIN only
 
-### Role Management
+---
+
+### 🎭 Role Management (`/api/roles`) - All ADMIN Only
 
 #### Get All Roles
 ```http
@@ -167,7 +239,19 @@ GET /api/roles
 Authorization: Bearer {token}
 ```
 
-#### Create Role (Admin only)
+#### Get Role by ID
+```http
+GET /api/roles/{id}
+Authorization: Bearer {token}
+```
+
+#### Get Role by Name
+```http
+GET /api/roles/name/{name}
+Authorization: Bearer {token}
+```
+
+#### Create Role
 ```http
 POST /api/roles
 Authorization: Bearer {token}
@@ -175,18 +259,49 @@ Content-Type: application/json
 
 {
   "name": "MODERATOR",
-  "description": "Content moderator role",
-  "permissions": ["READ_CONTENT", "UPDATE_CONTENT"]
+  "description": "Content moderator role"
 }
 ```
 
-#### Assign Role to User (Admin only)
+#### Update Role
 ```http
-POST /api/users/{userId}/roles/{roleId}
+PUT /api/roles/{id}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "name": "MODERATOR",
+  "description": "Updated description"
+}
+```
+
+#### Delete Role
+```http
+DELETE /api/roles/{id}
 Authorization: Bearer {token}
 ```
 
-### Permission Management
+#### Assign Permission to Role
+```http
+POST /api/roles/{roleId}/permissions/{permissionId}
+Authorization: Bearer {token}
+```
+
+#### Remove Permission from Role
+```http
+DELETE /api/roles/{roleId}/permissions/{permissionId}
+Authorization: Bearer {token}
+```
+
+#### Get Role Permissions
+```http
+GET /api/roles/{id}/permissions
+Authorization: Bearer {token}
+```
+
+---
+
+### 🔐 Permission Management (`/api/permissions`) - All ADMIN Only
 
 #### Get All Permissions
 ```http
@@ -194,17 +309,72 @@ GET /api/permissions
 Authorization: Bearer {token}
 ```
 
-#### Create Permission (Admin only)
+#### Get Permission by ID
+```http
+GET /api/permissions/{id}
+Authorization: Bearer {token}
+```
+
+#### Get Permissions by Resource
+```http
+GET /api/permissions/resource/{resource}
+Authorization: Bearer {token}
+```
+
+#### Get Permissions by Action
+```http
+GET /api/permissions/action/{action}
+Authorization: Bearer {token}
+```
+
+#### Get Permission by Resource and Action
+```http
+GET /api/permissions/resource/{resource}/action/{action}
+Authorization: Bearer {token}
+```
+
+#### Create Permission
 ```http
 POST /api/permissions
 Authorization: Bearer {token}
 Content-Type: application/json
 
 {
-  "name": "READ_HOTSPOTS",
-  "description": "Read cultural hotspots",
   "resource": "hotspots",
-  "action": "READ"
+  "action": "READ",
+  "description": "Read cultural hotspots"
+}
+```
+
+#### Update Permission
+```http
+PUT /api/permissions/{id}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "resource": "hotspots",
+  "action": "WRITE",
+  "description": "Write cultural hotspots"
+}
+```
+
+#### Delete Permission
+```http
+DELETE /api/permissions/{id}
+Authorization: Bearer {token}
+```
+
+#### Check if Permission Exists
+```http
+GET /api/permissions/exists?resource=hotspots&action=READ
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "exists": true
 }
 ```
 
@@ -544,25 +714,38 @@ All services use SLF4J with Lombok's `@Slf4j`:
 - JPA repositories with custom queries
 - JWT token provider (generation & validation)
 - Complete service layer (5 services)
+  - CustomUserDetailsService - Spring Security integration
+  - AuthService - Authentication (register, login, refresh)
+  - UserService - User CRUD operations
+  - RoleService - Role management
+  - PermissionService - Permission management
 - DTO classes (LoginRequest, RegisterRequest, JwtResponse, MessageResponse)
 - Environment-specific configurations
 - PostgreSQL integration
-
-### 🔄 In Progress
 - Spring Security configuration
-- REST Controllers
-- Data initialization service
+  - JWT authentication filter
+  - Security filter chain with role-based access
+  - CORS configuration
+  - Authentication entry point
+  - BCrypt password encoder
+- REST Controllers (4 controllers, 30+ endpoints)
+  - **AuthController** - `/api/auth` (register, login, refresh, health)
+  - **UserController** - `/api/users` (user CRUD, password change, role assignment)
+  - **RoleController** - `/api/roles` (role CRUD, permission assignment)
+  - **PermissionController** - `/api/permissions` (permission CRUD, resource-action queries)
 
 ### 📋 Next Steps
-1. Implement Spring Security configuration (SecurityFilterChain, JWT filter)
-2. Create REST Controllers (AuthController, UserController, RoleController, PermissionController)
-3. Add data initialization service (default roles, admin user)
+1. Add data initialization service (default roles, admin user, basic permissions)
+2. Add input validation with `@Valid` annotations
+3. Create custom exception classes
 4. Add email verification
-5. Implement password reset
+5. Implement password reset flow
 6. Add OAuth2 support (Google, GitHub)
 7. Add rate limiting
 8. Implement audit logging
 9. Add 2FA support
+10. Add API documentation (Swagger/OpenAPI)
+11. Add integration tests
 
 ## Support
 For issues or questions, create an issue in the GitHub repository.

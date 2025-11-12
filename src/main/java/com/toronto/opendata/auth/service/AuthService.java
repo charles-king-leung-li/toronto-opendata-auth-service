@@ -37,7 +37,7 @@ public class AuthService {
      * Register a new user
      */
     @Transactional
-    public User register(RegisterRequest request) {
+    public JwtResponse register(RegisterRequest request) {
         log.info("Registering new user: {}", request.getUsername());
         
         // Check if username exists
@@ -81,7 +81,11 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         log.info("User registered successfully: {}", savedUser.getUsername());
         
-        return savedUser;
+        // Generate tokens for the new user
+        String token = jwtTokenProvider.generateToken(savedUser.getUsername());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(savedUser.getUsername());
+        
+        return new JwtResponse(token, refreshToken, savedUser.getUsername(), savedUser.getEmail());
     }
     
     /**

@@ -33,6 +33,9 @@ public class Role {
     )
     private Set<Permission> permissions = new HashSet<>();
     
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
+    
     public Role(String name, String description) {
         this.name = name;
         this.description = description;
