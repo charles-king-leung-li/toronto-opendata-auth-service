@@ -1,0 +1,19 @@
+# Local Development Configuration - EXAMPLE
+# Copy this file to application-local.properties and update with your credentials
+
+# PostgreSQL Database Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/toronto_opendata_auth
+spring.datasource.driverClassName=org.postgresql.Driver
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD_HERE
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# Logging
+logging.level.com.toronto.opendata.auth=DEBUG
+logging.level.org.springframework.security=DEBUG
+
+# JWT Configuration (change this!)
+jwt.secret=ChangeThisToAVeryStrongSecretKeyForLocalDevelopment123456
