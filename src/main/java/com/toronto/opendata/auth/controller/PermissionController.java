@@ -6,6 +6,7 @@ import com.toronto.opendata.auth.service.PermissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class PermissionController {
      * GET /api/permissions/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPermissionById(@PathVariable Long id) {
+    public ResponseEntity<?> getPermissionById(@PathVariable @NonNull Long id) {
         log.info("Fetching permission with ID: {}", id);
         
         try {
@@ -59,7 +60,7 @@ public class PermissionController {
      * GET /api/permissions/resource/{resource}
      */
     @GetMapping("/resource/{resource}")
-    public ResponseEntity<List<Permission>> getPermissionsByResource(@PathVariable String resource) {
+    public ResponseEntity<List<Permission>> getPermissionsByResource(@PathVariable @NonNull String resource) {
         log.info("Fetching permissions for resource: {}", resource);
         List<Permission> permissions = permissionService.getPermissionsByResource(resource);
         return ResponseEntity.ok(permissions);
@@ -70,7 +71,7 @@ public class PermissionController {
      * GET /api/permissions/action/{action}
      */
     @GetMapping("/action/{action}")
-    public ResponseEntity<List<Permission>> getPermissionsByAction(@PathVariable String action) {
+    public ResponseEntity<List<Permission>> getPermissionsByAction(@PathVariable @NonNull String action) {
         log.info("Fetching permissions for action: {}", action);
         List<Permission> permissions = permissionService.getPermissionsByAction(action);
         return ResponseEntity.ok(permissions);
@@ -82,8 +83,8 @@ public class PermissionController {
      */
     @GetMapping("/resource/{resource}/action/{action}")
     public ResponseEntity<?> getPermissionByResourceAndAction(
-            @PathVariable String resource,
-            @PathVariable String action) {
+            @PathVariable @NonNull String resource,
+            @PathVariable @NonNull String action) {
         log.info("Fetching permission for resource: {} and action: {}", resource, action);
         
         try {
@@ -100,7 +101,7 @@ public class PermissionController {
      * POST /api/permissions
      */
     @PostMapping
-    public ResponseEntity<?> createPermission(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> createPermission(@RequestBody @NonNull Map<String, String> request) {
         log.info("Creating new permission");
         
         try {
@@ -123,8 +124,8 @@ public class PermissionController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePermission(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> request) {
+            @PathVariable @NonNull Long id,
+            @RequestBody @NonNull Map<String, String> request) {
         log.info("Updating permission with ID: {}", id);
         
         try {
@@ -146,7 +147,7 @@ public class PermissionController {
      * DELETE /api/permissions/{id}
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePermission(@PathVariable Long id) {
+    public ResponseEntity<?> deletePermission(@PathVariable @NonNull Long id) {
         log.info("Deleting permission with ID: {}", id);
         
         try {
@@ -165,8 +166,8 @@ public class PermissionController {
      */
     @GetMapping("/exists")
     public ResponseEntity<Map<String, Boolean>> permissionExists(
-            @RequestParam String resource,
-            @RequestParam String action) {
+            @RequestParam @NonNull String resource,
+            @RequestParam @NonNull String action) {
         log.info("Checking if permission exists for resource: {} and action: {}", resource, action);
         
         boolean exists = permissionService.permissionExists(resource, action);

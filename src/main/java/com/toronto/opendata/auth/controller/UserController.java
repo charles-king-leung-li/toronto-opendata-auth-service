@@ -6,6 +6,7 @@ import com.toronto.opendata.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable @NonNull Long id) {
         log.info("Fetching user with ID: {}", id);
         
         try {
@@ -61,7 +62,7 @@ public class UserController {
      * GET /api/users/me
      */
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+    public ResponseEntity<?> getCurrentUser(@NonNull Authentication authentication) {
         log.info("Fetching current user");
         
         try {
@@ -80,7 +81,7 @@ public class UserController {
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User userUpdate) {
+    public ResponseEntity<?> updateUser(@PathVariable @NonNull Long id, @RequestBody @NonNull User userUpdate) {
         log.info("Updating user with ID: {}", id);
         
         try {
@@ -100,8 +101,8 @@ public class UserController {
     @PostMapping("/{id}/change-password")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<?> changePassword(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> passwordRequest) {
+            @PathVariable @NonNull Long id,
+            @RequestBody @NonNull Map<String, String> passwordRequest) {
         log.info("Changing password for user ID: {}", id);
         
         try {
@@ -124,8 +125,8 @@ public class UserController {
     @PostMapping("/{id}/enabled")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> setUserEnabled(
-            @PathVariable Long id,
-            @RequestBody Map<String, Boolean> request) {
+            @PathVariable @NonNull Long id,
+            @RequestBody @NonNull Map<String, Boolean> request) {
         log.info("Setting enabled status for user ID: {}", id);
         
         try {
@@ -146,8 +147,8 @@ public class UserController {
     @PostMapping("/{id}/locked")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> setUserLocked(
-            @PathVariable Long id,
-            @RequestBody Map<String, Boolean> request) {
+            @PathVariable @NonNull Long id,
+            @RequestBody @NonNull Map<String, Boolean> request) {
         log.info("Setting locked status for user ID: {}", id);
         
         try {
@@ -167,7 +168,7 @@ public class UserController {
      */
     @PostMapping("/{userId}/roles/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> assignRole(@PathVariable Long userId, @PathVariable Long roleId) {
+    public ResponseEntity<?> assignRole(@PathVariable @NonNull Long userId, @PathVariable @NonNull Long roleId) {
         log.info("Assigning role {} to user {}", roleId, userId);
         
         try {
@@ -186,7 +187,7 @@ public class UserController {
      */
     @DeleteMapping("/{userId}/roles/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> removeRole(@PathVariable Long userId, @PathVariable Long roleId) {
+    public ResponseEntity<?> removeRole(@PathVariable @NonNull Long userId, @PathVariable @NonNull Long roleId) {
         log.info("Removing role {} from user {}", roleId, userId);
         
         try {
@@ -205,7 +206,7 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable @NonNull Long id) {
         log.info("Deleting user with ID: {}", id);
         
         try {

@@ -2,6 +2,7 @@ package com.toronto.opendata.auth.service;
 
 import com.toronto.opendata.auth.entity.Permission;
 import com.toronto.opendata.auth.repository.PermissionRepository;
+import org.springframework.lang.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class PermissionService {
      * Get permission by ID
      */
     @Transactional(readOnly = true)
-    public Permission getPermissionById(Long id) {
+    public Permission getPermissionById(@NonNull Long id) {
         log.debug("Fetching permission with ID: {}", id);
         return permissionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Permission not found with id: " + id));
@@ -39,7 +40,7 @@ public class PermissionService {
      * Get permissions by resource
      */
     @Transactional(readOnly = true)
-    public List<Permission> getPermissionsByResource(String resource) {
+    public List<Permission> getPermissionsByResource(@NonNull String resource) {
         log.debug("Fetching permissions for resource: {}", resource);
         return permissionRepository.findByResource(resource);
     }
@@ -92,7 +93,7 @@ public class PermissionService {
      * Update permission
      */
     @Transactional
-    public Permission updatePermission(Long id, String resource, String action, String description) {
+    public Permission updatePermission(@NonNull Long id, String resource, String action, String description) {
         log.info("Updating permission with ID: {}", id);
         
         Permission permission = getPermissionById(id);
@@ -121,6 +122,7 @@ public class PermissionService {
             permission.setDescription(description);
         }
         
+        @SuppressWarnings("null")
         Permission savedPermission = permissionRepository.save(permission);
         log.info("Permission updated successfully: {}:{}", 
                 savedPermission.getResource(), savedPermission.getAction());
@@ -135,6 +137,7 @@ public class PermissionService {
     public void deletePermission(Long id) {
         log.info("Deleting permission with ID: {}", id);
         
+        @SuppressWarnings("null")
         Permission permission = getPermissionById(id);
         
         // Remove all role associations

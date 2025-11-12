@@ -7,6 +7,7 @@ import com.toronto.opendata.auth.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,7 @@ public class RoleController {
      * GET /api/roles/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRoleById(@PathVariable Long id) {
+    public ResponseEntity<?> getRoleById(@PathVariable @NonNull Long id) {
         log.info("Fetching role with ID: {}", id);
         
         try {
@@ -60,7 +61,7 @@ public class RoleController {
      * GET /api/roles/name/{name}
      */
     @GetMapping("/name/{name}")
-    public ResponseEntity<?> getRoleByName(@PathVariable String name) {
+    public ResponseEntity<?> getRoleByName(@PathVariable @NonNull String name) {
         log.info("Fetching role with name: {}", name);
         
         try {
@@ -77,7 +78,7 @@ public class RoleController {
      * POST /api/roles
      */
     @PostMapping
-    public ResponseEntity<?> createRole(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> createRole(@RequestBody @NonNull Map<String, String> request) {
         log.info("Creating new role");
         
         try {
@@ -99,8 +100,8 @@ public class RoleController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRole(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> request) {
+            @PathVariable @NonNull Long id,
+            @RequestBody @NonNull Map<String, String> request) {
         log.info("Updating role with ID: {}", id);
         
         try {
@@ -121,7 +122,7 @@ public class RoleController {
      * DELETE /api/roles/{id}
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRole(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRole(@PathVariable @NonNull Long id) {
         log.info("Deleting role with ID: {}", id);
         
         try {
@@ -140,8 +141,8 @@ public class RoleController {
      */
     @PostMapping("/{roleId}/permissions/{permissionId}")
     public ResponseEntity<?> assignPermission(
-            @PathVariable Long roleId,
-            @PathVariable Long permissionId) {
+            @PathVariable @NonNull Long roleId,
+            @PathVariable @NonNull Long permissionId) {
         log.info("Assigning permission {} to role {}", permissionId, roleId);
         
         try {
@@ -160,8 +161,8 @@ public class RoleController {
      */
     @DeleteMapping("/{roleId}/permissions/{permissionId}")
     public ResponseEntity<?> removePermission(
-            @PathVariable Long roleId,
-            @PathVariable Long permissionId) {
+            @PathVariable @NonNull Long roleId,
+            @PathVariable @NonNull Long permissionId) {
         log.info("Removing permission {} from role {}", permissionId, roleId);
         
         try {
@@ -179,7 +180,7 @@ public class RoleController {
      * GET /api/roles/{id}/permissions
      */
     @GetMapping("/{id}/permissions")
-    public ResponseEntity<?> getRolePermissions(@PathVariable Long id) {
+    public ResponseEntity<?> getRolePermissions(@PathVariable @NonNull Long id) {
         log.info("Fetching permissions for role ID: {}", id);
         
         try {

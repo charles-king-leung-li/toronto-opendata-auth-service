@@ -31,6 +31,7 @@ public class RoleService {
     /**
      * Get role by ID
      */
+    @SuppressWarnings("null")
     @Transactional(readOnly = true)
     public Role getRoleById(Long id) {
         log.debug("Fetching role with ID: {}", id);
@@ -91,6 +92,7 @@ public class RoleService {
             role.setDescription(description);
         }
         
+        @SuppressWarnings("null")
         Role savedRole = roleRepository.save(role);
         log.info("Role updated successfully: {}", savedRole.getName());
         
@@ -124,6 +126,7 @@ public class RoleService {
         log.info("Assigning permission {} to role {}", permissionId, roleId);
         
         Role role = getRoleById(roleId);
+        @SuppressWarnings("null")
         Permission permission = permissionRepository.findById(permissionId)
                 .orElseThrow(() -> new RuntimeException("Permission not found with id: " + permissionId));
         
@@ -143,6 +146,7 @@ public class RoleService {
         log.info("Removing permission {} from role {}", permissionId, roleId);
         
         Role role = getRoleById(roleId);
+        @SuppressWarnings("null")
         Permission permission = permissionRepository.findById(permissionId)
                 .orElseThrow(() -> new RuntimeException("Permission not found with id: " + permissionId));
         

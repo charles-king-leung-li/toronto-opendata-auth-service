@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,7 +30,7 @@ public class AuthController {
      * POST /api/auth/register
      */
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody @NonNull RegisterRequest registerRequest) {
         log.info("Registration request for username: {}", registerRequest.getUsername());
         
         try {
@@ -48,7 +49,7 @@ public class AuthController {
      * POST /api/auth/login
      */
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody @NonNull LoginRequest loginRequest) {
         log.info("Login request for username: {}", loginRequest.getUsername());
         
         try {
@@ -67,7 +68,7 @@ public class AuthController {
      * POST /api/auth/refresh
      */
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") @NonNull String authHeader) {
         log.info("Token refresh request received");
         
         try {

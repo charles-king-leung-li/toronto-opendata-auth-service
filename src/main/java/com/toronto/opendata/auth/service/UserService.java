@@ -33,6 +33,7 @@ public class UserService {
     /**
      * Get user by ID
      */
+    @SuppressWarnings("null")
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
         log.debug("Fetching user with ID: {}", id);
@@ -82,6 +83,7 @@ public class UserService {
             user.setEmail(userUpdate.getEmail());
         }
         
+        @SuppressWarnings("null")
         User savedUser = userRepository.save(user);
         log.info("User updated successfully: {}", savedUser.getUsername());
         
@@ -143,6 +145,7 @@ public class UserService {
         log.info("Assigning role {} to user {}", roleId, userId);
         
         User user = getUserById(userId);
+        @SuppressWarnings("null")
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
         
@@ -159,6 +162,7 @@ public class UserService {
         log.info("Removing role {} from user {}", roleId, userId);
         
         User user = getUserById(userId);
+        @SuppressWarnings("null")
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
         
@@ -170,6 +174,7 @@ public class UserService {
     /**
      * Delete user
      */
+    @SuppressWarnings("null")
     @Transactional
     public void deleteUser(Long id) {
         log.info("Deleting user with ID: {}", id);
